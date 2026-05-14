@@ -14,7 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   regime classification) and `temporal-compare` (DTW pattern matching) as a
   **parallel tap** alongside RuView's existing event pipeline — no replacement,
   no behaviour change to the existing `/ws/sensing` fan-out or `wifi-densepose-signal`
-  DSP. Two new endpoints (off by default, enabled via `--introspection`):
+  DSP. Two new endpoints (always mounted — the tap is cheap enough at 0.041 ms p99
+  per-frame `update()` to ship hot by default):
   - `GET /ws/introspection` — newline-delimited JSON snapshots streamed at the CSI
     frame rate. Each snapshot carries `frame_count`, `regime` (Idle / Periodic /
     Transient / Chaotic / Unknown), `lyapunov_exponent`, `attractor_dim`,

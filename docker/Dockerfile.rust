@@ -3,7 +3,11 @@
 # Multi-stage build for minimal final image
 
 # Stage 1: Build
-FROM rust:1.85-bookworm AS builder
+# Rust 1.87+ is required: `hnsw_rs 0.3.4` (transitive via wifi-densepose-ruvector ->
+# ruvector-attn-mincut) uses `u*::is_multiple_of`, stabilised in 1.87. Pinning to a
+# recent stable (1.90) for reproducibility — bump cautiously since reproducible
+# builds rely on this.
+FROM rust:1.90-bookworm AS builder
 
 WORKDIR /build
 
