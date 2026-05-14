@@ -57,7 +57,13 @@ jobs:
           "
 
       - name: Run pipeline verification
-        working-directory: v1
+        working-directory: archive/v1
+        env:
+          # verify.py transitively imports src.app -> src.config.settings, which
+          # uses pydantic-settings with a required `secret_key` field. The proof
+          # only needs the import chain to resolve; the value is never used for
+          # any auth path in the proof pipeline.
+          SECRET_KEY: ci-proof-replay-only-not-a-real-secret
         run: |
           echo "=== Running pipeline verification ==="
           python data/proof/verify.py
@@ -65,7 +71,9 @@ jobs:
           echo "Pipeline verification PASSED."
 
       - name: Run verification twice to confirm determinism
-        working-directory: v1
+        working-directory: archive/v1
+        env:
+          SECRET_KEY: ci-proof-replay-only-not-a-real-secret
         run: |
           echo "=== Second run for determinism confirmation ==="
           python data/proof/verify.py
